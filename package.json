@@ -1,0 +1,12 @@
+{
+  "name": "Scorekeeper App",
+  "version": "1.2.0",
+  "description": "a test project to learn elm",
+  "main": "bundle.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Quincy",
+  "license": "BSD"
+}

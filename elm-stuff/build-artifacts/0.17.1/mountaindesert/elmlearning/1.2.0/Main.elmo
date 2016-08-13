@@ -1,0 +1,815 @@
+var _mountaindesert$elmlearning$Main$transform = _rtfeldman$elm_css$Css$property('transform');
+var _mountaindesert$elmlearning$Main$transition = _rtfeldman$elm_css$Css$property('transition');
+var _mountaindesert$elmlearning$Main$hideRow = _elm_lang$core$Native_List.fromArray(
+	[
+		_rtfeldman$elm_css$Css$opacity(
+		_rtfeldman$elm_css$Css$float(0)),
+		_rtfeldman$elm_css$Css$minHeight(
+		_rtfeldman$elm_css$Css$px(0)),
+		_rtfeldman$elm_css$Css$height(
+		_rtfeldman$elm_css$Css$px(0)),
+		_mountaindesert$elmlearning$Main$transition('opacity 1000ms, height 2000ms')
+	]);
+var _mountaindesert$elmlearning$Main$prepRow = _elm_lang$core$Native_List.fromArray(
+	[
+		_rtfeldman$elm_css$Css$opacity(
+		_rtfeldman$elm_css$Css$float(0)),
+		_rtfeldman$elm_css$Css$minHeight(
+		_rtfeldman$elm_css$Css$px(34)),
+		_mountaindesert$elmlearning$Main$transition('opacity 500ms')
+	]);
+var _mountaindesert$elmlearning$Main$editing = _elm_lang$core$Native_List.fromArray(
+	[
+		_rtfeldman$elm_css$Css$backgroundColor(
+		A4(_rtfeldman$elm_css$Css$rgba, 0, 0, 100, 0.3)),
+		_rtfeldman$elm_css$Css$borderRadius(
+		_rtfeldman$elm_css$Css$px(2)),
+		_rtfeldman$elm_css$Css$color(
+		A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255)),
+		_rtfeldman$elm_css$Css$paddingLeft(
+		_rtfeldman$elm_css$Css$px(3))
+	]);
+var _mountaindesert$elmlearning$Main$cellStyles = _elm_lang$core$Native_List.fromArray(
+	[
+		_rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$inlineBlock),
+		_rtfeldman$elm_css$Css$marginRight(
+		_rtfeldman$elm_css$Css$px(5))
+	]);
+var _mountaindesert$elmlearning$Main$rowStyles = _elm_lang$core$Native_List.fromArray(
+	[
+		_rtfeldman$elm_css$Css$minHeight(
+		_rtfeldman$elm_css$Css$px(34)),
+		_rtfeldman$elm_css$Css$paddingTop(
+		_rtfeldman$elm_css$Css$px(5)),
+		_rtfeldman$elm_css$Css$width(
+		_rtfeldman$elm_css$Css$pct(100)),
+		_mountaindesert$elmlearning$Main$transition('top 1000ms')
+	]);
+var _mountaindesert$elmlearning$Main$styles = function (_p0) {
+	return _elm_lang$html$Html_Attributes$style(
+		_rtfeldman$elm_css$Css$asPairs(_p0));
+};
+var _mountaindesert$elmlearning$Main$editPlayerClass = F2(
+	function (editPlayerId, player) {
+		var _p1 = editPlayerId;
+		if (_p1.ctor === 'Just') {
+			return _elm_lang$core$Native_Utils.eq(player.playerId, _p1._0) ? _mountaindesert$elmlearning$Main$editing : _elm_lang$core$Native_List.fromArray(
+				[]);
+		} else {
+			return _elm_lang$core$Native_List.fromArray(
+				[]);
+		}
+	});
+var _mountaindesert$elmlearning$Main$editInputClass = function (editPlayerId) {
+	var _p2 = editPlayerId;
+	if (_p2.ctor === 'Just') {
+		return _mountaindesert$elmlearning$Main$editing;
+	} else {
+		return _elm_lang$core$Native_List.fromArray(
+			[]);
+	}
+};
+var _mountaindesert$elmlearning$Main$pointTotal = function (model) {
+	var total = _elm_lang$core$List$sum(
+		A2(
+			_elm_lang$core$List$map,
+			function (_) {
+				return _.points;
+			},
+			model.plays));
+	return A2(
+		_elm_lang$html$Html$footer,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$rowStyles)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('pull-right')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Total: ')
+							])),
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(total))
+							]))
+					]))
+			]));
+};
+var _mountaindesert$elmlearning$Main$playerListHeader = A2(
+	_elm_lang$html$Html$header,
+	_elm_lang$core$Native_List.fromArray(
+		[]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+					_mountaindesert$elmlearning$Main$styles(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$underline)
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Name')
+				])),
+			A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+					_mountaindesert$elmlearning$Main$styles(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$underline)
+						])),
+					_elm_lang$html$Html_Attributes$class('pull-right')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Points')
+				]))
+		]));
+var _mountaindesert$elmlearning$Main$playListHeader = A2(
+	_elm_lang$html$Html$header,
+	_elm_lang$core$Native_List.fromArray(
+		[]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+					_mountaindesert$elmlearning$Main$styles(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$underline)
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Plays')
+				])),
+			A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+					_mountaindesert$elmlearning$Main$styles(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$underline)
+						])),
+					_elm_lang$html$Html_Attributes$class('pull-right')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Points')
+				]))
+		]));
+var _mountaindesert$elmlearning$Main$edit = F2(
+	function (model, playerId) {
+		var newPlays = A2(
+			_elm_lang$core$List$map,
+			function (play) {
+				return _elm_lang$core$Native_Utils.eq(play.playerId, playerId) ? _elm_lang$core$Native_Utils.update(
+					play,
+					{playerName: model.playerName}) : play;
+			},
+			model.plays);
+		var newPlayers = A2(
+			_elm_lang$core$List$map,
+			function (player) {
+				return _elm_lang$core$Native_Utils.eq(player.playerId, playerId) ? _elm_lang$core$Native_Utils.update(
+					player,
+					{playerName: model.playerName}) : player;
+			},
+			model.players);
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{players: newPlayers, plays: newPlays, playerName: '', playerId: _elm_lang$core$Maybe$Nothing});
+	});
+var _mountaindesert$elmlearning$Main$deletePlayer = F2(
+	function (model, player) {
+		var newPlayers = A2(
+			_elm_lang$core$List$filter,
+			function (p) {
+				return !_elm_lang$core$Native_Utils.eq(p.playerId, player.playerId);
+			},
+			model.players);
+		var newPlays = A2(
+			_elm_lang$core$List$filter,
+			function (p) {
+				return !_elm_lang$core$Native_Utils.eq(p.playerId, player.playerId);
+			},
+			model.plays);
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{plays: newPlays, players: newPlayers});
+	});
+var _mountaindesert$elmlearning$Main$deletePlay = F2(
+	function (model, play) {
+		if (_elm_lang$core$Native_Utils.eq(play.transparent, true)) {
+			var newPlays = A2(
+				_elm_lang$core$List$filter,
+				function (p) {
+					return !_elm_lang$core$Native_Utils.eq(p.id, play.id);
+				},
+				model.plays);
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{plays: newPlays});
+		} else {
+			return model;
+		}
+	});
+var _mountaindesert$elmlearning$Main$hidePlay = F2(
+	function (model, play) {
+		var newPlayers = A2(
+			_elm_lang$core$List$map,
+			function (player) {
+				return _elm_lang$core$Native_Utils.eq(player.playerId, play.playerId) ? _elm_lang$core$Native_Utils.update(
+					player,
+					{points: player.points - (1 * play.points)}) : player;
+			},
+			model.players);
+		var newPlays = A2(
+			_elm_lang$core$List$map,
+			function (p) {
+				return _elm_lang$core$Native_Utils.eq(p.id, play.id) ? _elm_lang$core$Native_Utils.update(
+					play,
+					{transparent: true, points: 0}) : p;
+			},
+			model.plays);
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{plays: newPlays, players: newPlayers});
+	});
+var _mountaindesert$elmlearning$Main$model = {
+	players: _elm_lang$core$Native_List.fromArray(
+		[]),
+	playerName: '',
+	playerId: _elm_lang$core$Maybe$Nothing,
+	plays: _elm_lang$core$Native_List.fromArray(
+		[])
+};
+var _mountaindesert$elmlearning$Main$Model = F4(
+	function (a, b, c, d) {
+		return {players: a, playerName: b, playerId: c, plays: d};
+	});
+var _mountaindesert$elmlearning$Main$Player = F5(
+	function (a, b, c, d, e) {
+		return {playerId: a, playerName: b, points: c, transparent: d, newlymade: e};
+	});
+var _mountaindesert$elmlearning$Main$add = function (model) {
+	var player = A5(
+		_mountaindesert$elmlearning$Main$Player,
+		_elm_lang$core$List$length(model.players),
+		model.playerName,
+		0,
+		false,
+		true);
+	var newPlayers = A2(_elm_lang$core$List_ops['::'], player, model.players);
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{players: newPlayers, playerName: ''});
+};
+var _mountaindesert$elmlearning$Main$save = function (model) {
+	var _p3 = model.playerId;
+	if (_p3.ctor === 'Just') {
+		return A2(_mountaindesert$elmlearning$Main$edit, model, _p3._0);
+	} else {
+		return _mountaindesert$elmlearning$Main$add(model);
+	}
+};
+var _mountaindesert$elmlearning$Main$Play = F6(
+	function (a, b, c, d, e, f) {
+		return {id: a, playerId: b, playerName: c, points: d, transparent: e, newlymade: f};
+	});
+var _mountaindesert$elmlearning$Main$prepareScore = F3(
+	function (model, scorer, points) {
+		var play = A6(
+			_mountaindesert$elmlearning$Main$Play,
+			_elm_lang$core$List$length(model.plays),
+			scorer.playerId,
+			scorer.playerName,
+			points,
+			true,
+			true);
+		var newPlayers = A2(
+			_elm_lang$core$List$map,
+			function (player) {
+				return _elm_lang$core$Native_Utils.eq(player.playerId, scorer.playerId) ? _elm_lang$core$Native_Utils.update(
+					player,
+					{points: player.points + points}) : player;
+			},
+			model.players);
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				players: newPlayers,
+				plays: A2(_elm_lang$core$List_ops['::'], play, model.plays)
+			});
+	});
+var _mountaindesert$elmlearning$Main$score = F3(
+	function (model, scorer, points) {
+		var play = A6(
+			_mountaindesert$elmlearning$Main$Play,
+			_elm_lang$core$List$length(model.plays),
+			scorer.playerId,
+			scorer.playerName,
+			points,
+			false,
+			true);
+		var newPlayers = A2(
+			_elm_lang$core$List$map,
+			function (player) {
+				return _elm_lang$core$Native_Utils.eq(player.playerId, scorer.playerId) ? _elm_lang$core$Native_Utils.update(
+					player,
+					{points: player.points + points}) : player;
+			},
+			model.players);
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				players: newPlayers,
+				plays: A2(_elm_lang$core$List_ops['::'], play, model.plays)
+			});
+	});
+var _mountaindesert$elmlearning$Main$update = F2(
+	function (msg, model) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'Input':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{playerName: _p4._0});
+			case 'Cancel':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{playerName: '', playerId: _elm_lang$core$Maybe$Nothing});
+			case 'DeletePlay':
+				return A2(_mountaindesert$elmlearning$Main$deletePlay, model, _p4._0);
+			case 'HidePlay':
+				return A2(_mountaindesert$elmlearning$Main$hidePlay, model, _p4._0);
+			case 'DeletePlayer':
+				return A2(_mountaindesert$elmlearning$Main$deletePlayer, model, _p4._0);
+			case 'Edit':
+				var _p5 = _p4._0;
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						playerName: _p5.playerName,
+						playerId: _elm_lang$core$Maybe$Just(_p5.playerId)
+					});
+			case 'Save':
+				return _elm_lang$core$String$isEmpty(model.playerName) ? model : _mountaindesert$elmlearning$Main$save(model);
+			case 'Score':
+				return A3(_mountaindesert$elmlearning$Main$score, model, _p4._0, _p4._1);
+			case 'PrepScore':
+				return A3(_mountaindesert$elmlearning$Main$prepareScore, model, _p4._0, _p4._1);
+			default:
+				return model;
+		}
+	});
+var _mountaindesert$elmlearning$Main$Tick = function (a) {
+	return {ctor: 'Tick', _0: a};
+};
+var _mountaindesert$elmlearning$Main$subscriptions = function (model) {
+	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$millisecond, _mountaindesert$elmlearning$Main$Tick);
+};
+var _mountaindesert$elmlearning$Main$DeletePlayer = function (a) {
+	return {ctor: 'DeletePlayer', _0: a};
+};
+var _mountaindesert$elmlearning$Main$HidePlay = function (a) {
+	return {ctor: 'HidePlay', _0: a};
+};
+var _mountaindesert$elmlearning$Main$DeletePlay = function (a) {
+	return {ctor: 'DeletePlay', _0: a};
+};
+var _mountaindesert$elmlearning$Main$play = function (play) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$core$Native_Utils.eq(play.transparent, true) ? _mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$hideRow) : _mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$rowStyles)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$i,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+						_elm_lang$html$Html_Attributes$class('remove btn btn-xs btn-danger glyphicon glyphicon-remove'),
+						_elm_lang$html$Html_Events$onClick(
+						_mountaindesert$elmlearning$Main$HidePlay(play)),
+						_elm_lang$html$Html_Events$onMouseLeave(
+						_mountaindesert$elmlearning$Main$DeletePlay(play))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(play.playerName)
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+						_elm_lang$html$Html_Attributes$class('pull-right')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(play.points))
+					]))
+			]));
+};
+var _mountaindesert$elmlearning$Main$playList = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		A2(_elm_lang$core$List$map, _mountaindesert$elmlearning$Main$play, model.plays));
+};
+var _mountaindesert$elmlearning$Main$playSection = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_mountaindesert$elmlearning$Main$styles(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_rtfeldman$elm_css$Css$flexGrow(
+						_rtfeldman$elm_css$Css$int(1)),
+						_rtfeldman$elm_css$Css$maxWidth(
+						_rtfeldman$elm_css$Css$px(400)),
+						_rtfeldman$elm_css$Css$minWidth(
+						_rtfeldman$elm_css$Css$px(200)),
+						_rtfeldman$elm_css$Css$backgroundColor(
+						A4(_rtfeldman$elm_css$Css$rgba, 255, 255, 255, 0.8)),
+						_rtfeldman$elm_css$Css$borderRadius(
+						_rtfeldman$elm_css$Css$px(3)),
+						_rtfeldman$elm_css$Css$padding(
+						_rtfeldman$elm_css$Css$px(7))
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_mountaindesert$elmlearning$Main$playListHeader,
+				_mountaindesert$elmlearning$Main$playList(model)
+			]));
+};
+var _mountaindesert$elmlearning$Main$Cancel = {ctor: 'Cancel'};
+var _mountaindesert$elmlearning$Main$Save = {ctor: 'Save'};
+var _mountaindesert$elmlearning$Main$Input = function (a) {
+	return {ctor: 'Input', _0: a};
+};
+var _mountaindesert$elmlearning$Main$playerForm = function (model) {
+	return A2(
+		_elm_lang$html$Html$form,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Events$onSubmit(_mountaindesert$elmlearning$Main$Save),
+				_mountaindesert$elmlearning$Main$styles(
+				_elm_lang$core$Native_List.fromArray(
+					[_rtfeldman$elm_css$Css$displayFlex]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('text'),
+						_elm_lang$html$Html_Attributes$placeholder('Add/Edit Player ...'),
+						_elm_lang$html$Html_Events$onInput(_mountaindesert$elmlearning$Main$Input),
+						_elm_lang$html$Html_Attributes$value(model.playerName),
+						_mountaindesert$elmlearning$Main$styles(
+						_mountaindesert$elmlearning$Main$editInputClass(model.playerId)),
+						_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+						_mountaindesert$elmlearning$Main$styles(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_rtfeldman$elm_css$Css$borderRadius(
+								_rtfeldman$elm_css$Css$px(3)),
+								A3(
+								_rtfeldman$elm_css$Css$border3,
+								_rtfeldman$elm_css$Css$px(1),
+								_rtfeldman$elm_css$Css$solid,
+								A4(_rtfeldman$elm_css$Css$rgba, 255, 255, 255, 0.8)),
+								_rtfeldman$elm_css$Css$paddingLeft(
+								_rtfeldman$elm_css$Css$px(4))
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('submit'),
+						_elm_lang$html$Html_Attributes$class('btn btn-xs btn-success'),
+						_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Save')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('button'),
+						_elm_lang$html$Html_Attributes$class('btn btn-xs btn-warning'),
+						_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+						_elm_lang$html$Html_Events$onClick(_mountaindesert$elmlearning$Main$Cancel)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Cancel')
+					]))
+			]));
+};
+var _mountaindesert$elmlearning$Main$Score = F2(
+	function (a, b) {
+		return {ctor: 'Score', _0: a, _1: b};
+	});
+var _mountaindesert$elmlearning$Main$PrepScore = F2(
+	function (a, b) {
+		return {ctor: 'PrepScore', _0: a, _1: b};
+	});
+var _mountaindesert$elmlearning$Main$Edit = function (a) {
+	return {ctor: 'Edit', _0: a};
+};
+var _mountaindesert$elmlearning$Main$player = F2(
+	function (editPlayerId, player) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$rowStyles)
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+							_mountaindesert$elmlearning$Main$styles(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_rtfeldman$elm_css$Css$width(
+									_rtfeldman$elm_css$Css$px(200)),
+									_rtfeldman$elm_css$Css$lineHeight(
+									_rtfeldman$elm_css$Css$px(22))
+								])),
+							_mountaindesert$elmlearning$Main$styles(
+							A2(_mountaindesert$elmlearning$Main$editPlayerClass, editPlayerId, player))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(player.playerName)
+						])),
+					A2(
+					_elm_lang$html$Html$i,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+							_elm_lang$html$Html_Attributes$class('btn btn-xs btn-info glyphicon glyphicon-pencil'),
+							_elm_lang$html$Html_Events$onClick(
+							_mountaindesert$elmlearning$Main$Edit(player))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$i,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+							_elm_lang$html$Html_Attributes$class('delete btn btn-xs btn-danger glyphicon glyphicon-remove'),
+							_elm_lang$html$Html_Events$onClick(
+							_mountaindesert$elmlearning$Main$DeletePlayer(player))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('btn-group'),
+							_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles)
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$type$('button'),
+									_elm_lang$html$Html_Events$onClick(
+									A2(_mountaindesert$elmlearning$Main$Score, player, 1)),
+									_elm_lang$html$Html_Attributes$class('btn btn-default btn-xs')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('1pt')
+								])),
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$type$('button'),
+									_elm_lang$html$Html_Events$onClick(
+									A2(_mountaindesert$elmlearning$Main$Score, player, 2)),
+									_elm_lang$html$Html_Attributes$class('btn btn-default btn-xs')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('2pt')
+								])),
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$type$('button'),
+									_elm_lang$html$Html_Events$onClick(
+									A2(_mountaindesert$elmlearning$Main$Score, player, 3)),
+									_elm_lang$html$Html_Attributes$class('btn btn-default btn-xs')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('3pt')
+								]))
+						])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_mountaindesert$elmlearning$Main$styles(_mountaindesert$elmlearning$Main$cellStyles),
+							_elm_lang$html$Html_Attributes$class('pull-right')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(player.points))
+						]))
+				]));
+	});
+var _mountaindesert$elmlearning$Main$playerList = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		A2(
+			_elm_lang$core$List$map,
+			_mountaindesert$elmlearning$Main$player(model.playerId),
+			A2(
+				_elm_lang$core$List$sortBy,
+				function (_) {
+					return _.playerName;
+				},
+				model.players)));
+};
+var _mountaindesert$elmlearning$Main$playerSection = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_mountaindesert$elmlearning$Main$styles(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_rtfeldman$elm_css$Css$backgroundColor(
+						A4(_rtfeldman$elm_css$Css$rgba, 255, 255, 255, 0.8)),
+						_rtfeldman$elm_css$Css$borderRadius(
+						_rtfeldman$elm_css$Css$px(3)),
+						_rtfeldman$elm_css$Css$padding(
+						_rtfeldman$elm_css$Css$px(7)),
+						_rtfeldman$elm_css$Css$marginBottom(
+						_rtfeldman$elm_css$Css$px(10))
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_mountaindesert$elmlearning$Main$playerListHeader,
+				_mountaindesert$elmlearning$Main$playerList(model),
+				_mountaindesert$elmlearning$Main$pointTotal(model)
+			]));
+};
+var _mountaindesert$elmlearning$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('scoreboard'),
+				_mountaindesert$elmlearning$Main$styles(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_rtfeldman$elm_css$Css$width(_rtfeldman$elm_css$Css$auto),
+						_rtfeldman$elm_css$Css$maxWidth(
+						_rtfeldman$elm_css$Css$px(900)),
+						_rtfeldman$elm_css$Css$marginLeft(_rtfeldman$elm_css$Css$auto),
+						_rtfeldman$elm_css$Css$marginRight(_rtfeldman$elm_css$Css$auto),
+						_rtfeldman$elm_css$Css$paddingLeft(
+						_rtfeldman$elm_css$Css$px(10))
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$h1,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_mountaindesert$elmlearning$Main$styles(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_rtfeldman$elm_css$Css$color(
+								A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255))
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Score Keeper')
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_mountaindesert$elmlearning$Main$styles(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_rtfeldman$elm_css$Css$displayFlex,
+								_rtfeldman$elm_css$Css$flexDirection(_rtfeldman$elm_css$Css$row),
+								_rtfeldman$elm_css$Css$flexWrap(_rtfeldman$elm_css$Css$wrap)
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_mountaindesert$elmlearning$Main$styles(
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_rtfeldman$elm_css$Css$flexGrow(
+										_rtfeldman$elm_css$Css$int(3)),
+										_rtfeldman$elm_css$Css$maxWidth(
+										_rtfeldman$elm_css$Css$px(500)),
+										_rtfeldman$elm_css$Css$minWidth(
+										_rtfeldman$elm_css$Css$px(400)),
+										_rtfeldman$elm_css$Css$marginBottom(
+										_rtfeldman$elm_css$Css$px(20)),
+										_rtfeldman$elm_css$Css$marginRight(_rtfeldman$elm_css$Css$auto),
+										_rtfeldman$elm_css$Css$paddingRight(
+										_rtfeldman$elm_css$Css$px(15))
+									]))
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_mountaindesert$elmlearning$Main$playerSection(model),
+								_mountaindesert$elmlearning$Main$playerForm(model)
+							])),
+						_mountaindesert$elmlearning$Main$playSection(model)
+					]))
+			]));
+};
+var _mountaindesert$elmlearning$Main$main = {
+	main: _elm_lang$html$Html_App$beginnerProgram(
+		{model: _mountaindesert$elmlearning$Main$model, view: _mountaindesert$elmlearning$Main$view, update: _mountaindesert$elmlearning$Main$update})
+};
