@@ -6,7 +6,9 @@ import Html.Events exposing (..)
 import Html.App as App
 import String
 import Css exposing (..)
-import Time exposing (Time, millisecond)
+import Time exposing (Time, millisecond, second)
+import Process exposing (..)
+import Task exposing (..)
 
 
 --import Css.Elements exposing (body, li)
@@ -26,8 +28,7 @@ type alias Player =
     { playerId : Int
     , playerName : String
     , points : Int
-    , transparent : Bool
-    , newlymade : Bool
+    , hidden : Bool
     }
 
 
@@ -36,18 +37,19 @@ type alias Play =
     , playerId : Int
     , playerName : String
     , points : Int
-    , transparent : Bool
-    , newlymade : Bool
+    , hidden : Bool
     }
 
 
-model : Model
-model =
-    { players = []
-    , playerName = ""
-    , playerId = Nothing
-    , plays = []
-    }
+init : ( Model, Cmd Msg )
+init =
+    ( { players = []
+      , playerName = ""
+      , playerId = Nothing
+      , plays = []
+      }
+    , Cmd.none
+    )
 
 
 
@@ -56,52 +58,56 @@ model =
 
 type Msg
     = Edit Player
-    | PrepScore Player Int
-    | Score Player Int
     | Input String
     | Save
     | Cancel
-    | DeletePlay Play
+    | PrepPlay Player Int
+    | Score
     | HidePlay Play
+    | DeletePlay Play
+    | HidePlayer Player
     | DeletePlayer Player
-    | Tick Time
+    | NoOp
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Input playerName ->
-            { model | playerName = playerName }
+            ( { model | playerName = playerName }, Cmd.none )
 
         Cancel ->
-            { model | playerName = "", playerId = Nothing }
+            ( { model | playerName = "", playerId = Nothing }, Cmd.none )
 
-        DeletePlay play ->
-            deletePlay model play
-
-        HidePlay play ->
-            hidePlay model play
+        HidePlayer player ->
+            ( hidePlayer model player, Process.sleep (500 * millisecond) |> Task.perform (\_ -> NoOp) (\_ -> DeletePlayer player) )
 
         DeletePlayer player ->
-            deletePlayer model player
+            ( deletePlayer model player, Cmd.none )
 
         Edit player ->
-            { model | playerName = player.playerName, playerId = Just player.playerId }
+            ( { model | playerName = player.playerName, playerId = Just player.playerId }, Cmd.none )
 
         Save ->
             if (String.isEmpty model.playerName) then
-                model
+                ( model, Cmd.none )
             else
-                save model
+                ( save model, Cmd.none )
 
-        Score player points ->
-            score model player points
+        PrepPlay player points ->
+            ( preparePlay model player points, Process.sleep (500 * millisecond) |> Task.perform (\_ -> NoOp) (\_ -> Score) )
 
-        PrepScore player points ->
-            prepareScore model player points
+        Score ->
+            ( score model, Cmd.none )
 
-        _ ->
-            model
+        HidePlay play ->
+            ( hidePlay model play, Process.sleep (500 * millisecond) |> Task.perform (\_ -> NoOp) (\_ -> DeletePlay play) )
+
+        DeletePlay play ->
+            ( deletePlay model play, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 hidePlay : Model -> Play -> Model
@@ -111,7 +117,7 @@ hidePlay model play =
             List.map
                 (\p ->
                     if p.id == play.id then
-                        { play | transparent = True, points = 0 }
+                        { play | hidden = True, points = 0 }
                     else
                         p
                 )
@@ -132,38 +138,43 @@ hidePlay model play =
 
 deletePlay : Model -> Play -> Model
 deletePlay model play =
-    if play.transparent == True then
-        let
-            newPlays =
-                List.filter (\p -> p.id /= play.id) model.plays
-        in
-            { model | plays = newPlays }
-    else
-        model
+    let
+        newPlays =
+            List.filter (\p -> p.id /= play.id) model.plays
+    in
+        { model | plays = newPlays }
+
+
+hidePlayer : Model -> Player -> Model
+hidePlayer model player =
+    let
+        newPlays =
+            List.filter (\p -> p.playerId /= player.playerId) model.plays
+
+        newPlayers =
+            List.map
+                (\p ->
+                    if p.playerId == player.playerId then
+                        { player | hidden = True, points = 0 }
+                    else
+                        p
+                )
+                model.players
+    in
+        { model | plays = newPlays, players = newPlayers }
 
 
 deletePlayer : Model -> Player -> Model
 deletePlayer model player =
     let
-        newPlays =
-            {--List.map
-                (\plays ->
-                    if play.playerId == player.playerId then
-                        deletePlay model play
-                    else
-                        play
-                )
-                model.plays--}
-            List.filter (\p -> p.playerId /= player.playerId) model.plays
-
         newPlayers =
             List.filter (\p -> p.playerId /= player.playerId) model.players
     in
-        { model | plays = newPlays, players = newPlayers }
+        { model | players = newPlayers }
 
 
-prepareScore : Model -> Player -> Int -> Model
-prepareScore model scorer points =
+preparePlay : Model -> Player -> Int -> Model
+preparePlay model scorer points =
     let
         newPlayers =
             List.map
@@ -176,42 +187,72 @@ prepareScore model scorer points =
                 model.players
 
         play =
-            Play (List.length model.plays) scorer.playerId scorer.playerName points True True
+            Play (List.length model.plays) scorer.playerId scorer.playerName points True
     in
         { model | players = newPlayers, plays = play :: model.plays }
 
 
-score : Model -> Player -> Int -> Model
-score model scorer points =
-    let
-        newPlayers =
+score : Model -> Model
+score model =
+    {--let
+        newPlays =
             List.map
-                (\player ->
-                    if player.playerId == scorer.playerId then
-                        { player | points = player.points + points }
+                (\p ->
+                    if p.hidden == True then
+                        { p | hidden = False }
                     else
-                        player
+                        p
                 )
-                model.players
-
-        play =
-            Play (List.length model.plays) scorer.playerId scorer.playerName points False True
+                model.plays
     in
-        { model | players = newPlayers, plays = play :: model.plays }
+        { model | plays = newPlays }
+--}
+    {--let
+        play =
+            List.head model.plays
+
+        newPlays =
+            List.map
+                (\p ->
+                    if p.id == play.id then
+                        { p | hidden = False }
+                    else
+                        p
+                )
+                model.plays
+    in
+        { model | plays = newPlays }--}
+    case List.head model.plays of
+        Just play ->
+            let
+                newPlays =
+                    List.map
+                        (\p ->
+                            if p.id == play.id then
+                                { p | hidden = False }
+                            else
+                                p
+                        )
+                        model.plays
+            in
+                { model | plays = newPlays }
+
+        Nothing ->
+            model
 
 
 save : Model -> Model
 save model =
     case model.playerId of
         Just id ->
-            edit model id
+            editPlayer model id
 
         Nothing ->
-            add model
+            addPlayer model
 
 
-edit : Model -> Int -> Model
-edit model playerId =
+editPlayer : Model -> Int -> Model
+editPlayer model playerId =
     let
         newPlayers =
             List.map
@@ -241,16 +282,37 @@ edit model playerId =
         }
 
 
-add : Model -> Model
-add model =
+createPlayer : Model -> Model
+createPlayer model =
     let
         player =
-            Player (List.length model.players) model.playerName 0 False True
+            Player (List.length model.players) model.playerName 0 True
 
         newPlayers =
             player :: model.players
     in
         { model | players = newPlayers, playerName = "" }
+
+
+addPlayer : Model -> Model
+addPlayer model =
+    let
+        player =
+            Player (List.length model.players) model.playerName 0 False
+
+        newPlayers =
+            player :: model.players
+    in
+        { model | players = newPlayers, playerName = "" }
+
+
+
+-- subscriptions
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
 
 
 
@@ -270,6 +332,7 @@ view model =
                 ]
             , playSection model
             ]
+        , p [ styles [ color (rgb 255 255 255) ] ] [ Html.text (toString model) ]
         ]
 
 
@@ -303,10 +366,7 @@ playList model =
 play : Play -> Html Msg
 play play =
     Html.div
-        [ {--if play.newlymade == True then
-            styles prepRow
-          else --}
-          if play.transparent == True then
+        [ if play.hidden then
             styles hideRow
           else
             styles rowStyles
@@ -314,8 +374,7 @@ play play =
         [ i
             [ styles cellStyles
             , class "remove btn btn-xs btn-danger glyphicon glyphicon-remove"
-            , onClick (HidePlay play)
-            , onMouseLeave (DeletePlay play)
+            , onMouseDown (HidePlay play)
             ]
             []
         , div [ styles cellStyles ] [ Html.text play.playerName ]
@@ -352,7 +411,12 @@ playerList model =
 
 player : Maybe Int -> Player -> Html Msg
 player editPlayerId player =
-    Html.div [ styles rowStyles ]
+    Html.div
+        [ if player.hidden then
+            styles hideRow
+          else
+            styles rowStyles
+        ]
         [ div [ styles cellStyles, styles [ Css.width (px 200), lineHeight (px 22) ], styles (editPlayerClass editPlayerId player) ]
             [ Html.text player.playerName ]
         , i
@@ -364,26 +428,25 @@ player editPlayerId player =
         , i
             [ styles cellStyles
             , class "delete btn btn-xs btn-danger glyphicon glyphicon-remove"
-            , onClick (DeletePlayer player)
+            , onMouseDown (HidePlayer player)
             ]
             []
         , div [ class "btn-group", styles cellStyles ]
             [ button
                 [ type' "button"
-                  --, onMouseDown (PrepScore player 1)
-                , onClick (Score player 1)
+                , onMouseDown (PrepPlay player 1)
                 , class "btn btn-default btn-xs"
                 ]
                 [ Html.text "1pt" ]
             , button
                 [ type' "button"
-                , onClick (Score player 2)
+                , onMouseDown (PrepPlay player 2)
                 , class "btn btn-default btn-xs"
                 ]
                 [ Html.text "2pt" ]
             , button
                 [ type' "button"
-                , onClick (Score player 3)
+                , onMouseDown (PrepPlay player 3)
                 , class "btn btn-default btn-xs"
                 ]
                 [ Html.text "3pt" ]
@@ -463,7 +526,7 @@ rowStyles =
     [ Css.minHeight (px 34)
     , paddingTop (px 5)
     , Css.width (pct 100)
-    , transition "top 1000ms"
+    , transition "opacity 500ms"
     ]
 
 
@@ -484,20 +547,12 @@ editing =
     ]
 
 
-prepRow : List Css.Mixin
-prepRow =
-    [ opacity (float 0)
-    , Css.minHeight (px 34)
-    , transition "opacity 500ms"
-    ]
-
-
 hideRow : List Css.Mixin
 hideRow =
     [ opacity (float 0)
-    , Css.minHeight (px 0)
-    , Css.height (px 0)
-    , transition "opacity 1000ms, height 2000ms"
+    , Css.minHeight (px 34)
+    , paddingTop (px 5)
+    , transition "opacity 500ms, top 1000ms"
     ]
 
 
@@ -506,30 +561,11 @@ transition =
     Css.property "transition"
 
 
-transform : String -> Css.Mixin
-transform =
-    Css.property "transform"
-
-
-
-{--animation: String -> Css.Mixin
-animation =
-    Css.property "animation"--}
-
-
 main : Program Never
 main =
-    App.beginnerProgram
-        { model = model
+    App.program
+        { init = init
         , view = view
         , update = update
+        , subscriptions = subscriptions
         }
-
-
-
--- Subscriptions
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Time.every millisecond Tick
